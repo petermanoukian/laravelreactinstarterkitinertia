@@ -20,10 +20,11 @@ const selectedRole = searchParams.get('role') || 'user';
         filer: null,
     });
 
+    /*
     const { auth } = usePage().props as {
         auth: { user: { name: string; email: string } };
     };
-
+    */
     const [emailExists, setEmailExists] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -148,20 +149,40 @@ const selectedRole = searchParams.get('role') || 'user';
                     className ="bg-blue-600 text-blue-700 rounded
                     hover:bg-blue-200 hover:text-blue-500
                     py-3 mb-3 px-4 text-white hover:text-blue-500">
-                        &raquo; View Userss
+                        &raquo; View Users
                     </Link>
                 </p>
 
 
                 <form onSubmit={handleSubmit} className="mt-5 space-y-4 max-w-md"
                 autoComplete="off">
+                    <div>
+                        <label>Role</label>
+                        <select
+                            value={datax.role}
+                            onChange={(e) => {
+                                setData('role', e.target.value);
+                                setLocalErrors(prev => ({ ...prev, role: '' }));
+                            }}
+                            className="w-full border p-2" >
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                            <option value="superadmin">Superadmin</option>
+                        </select>
+                        {localErrors.role && <div className="text-red-500 text-sm">{localErrors.role}</div>}
+                        {errors.role && <div className="text-red-500">{errors.role}</div>}
+                    </div>
                     
                     <div>
                         <label>Name</label>
                         <input
                             type="text"
                             value={datax.name}
-                            onChange={(e) => setData('name', e.target.value)}
+                            
+                            onChange={(e) => {
+                                setData('name', e.target.value);
+                                setLocalErrors(prev => ({ ...prev, name: '' }));
+                            }}
                             className="w-full border p-2"
                         />
                         {localErrors.name && <div className="text-red-500 text-sm">{localErrors.name}</div>}
@@ -169,24 +190,26 @@ const selectedRole = searchParams.get('role') || 'user';
                     </div>
 
                     <div>
-                        <label>Email   </label>
-                        
-                            <input
-                                type="email"
-                                name="add_user_email" // 👈 not "email"
-                                autoComplete="off"
-                                value={datax.email}
-                                onChange={(e) => setData('email', e.target.value)}
-                                onBlur={(e) => checkEmail(e.target.value)}
-                                className="w-full border p-2"
-                            />
-                            {emailExists && (
-                                <div className="text-red-500 text-sm mt-1">
-                                    This email is already in use.
-                                </div>
-                            )}
+                        <label>Email   </label>    
+                        <input
+                            type="email"
+                            name="add_user_email" // 👈 not "email"
+                            autoComplete="off"
+                            value={datax.email}
+                            onChange={(e) => {
+                                setData('email', e.target.value);
+                                setEmailExists(false);
+                                setLocalErrors(prev => ({ ...prev, email: '' }));
+                            }}
+                            onBlur={(e) => checkEmail(e.target.value)}
+                            className="w-full border p-2"
+                        />
+                        {emailExists && (
+                            <div className="text-red-500 text-sm mt-1">
+                                This email is already in use.
+                            </div>
+                        )}
                         {localErrors.email && <div className="text-red-500 text-sm">{localErrors.email}</div>}
-
                         {errors.email && <div className="text-red-500">{errors.email}</div>}
                     </div>
 
@@ -195,28 +218,16 @@ const selectedRole = searchParams.get('role') || 'user';
                         <input
                             type="password"
                             value={datax.password}
-                            onChange={(e) => setData('password', e.target.value)}
+                             onChange={(e) => {
+                                setData('password', e.target.value);
+                                setLocalErrors(prev => ({ ...prev, password: '' }));
+                            }}
+
                             className="w-full border p-2"
                         />
                         {localErrors.password && <div className="text-red-500 text-sm">{localErrors.password}</div>}
                         {errors.password && <div className="text-red-500">{errors.password}</div>}
                     </div>
-
-                    <div>
-                        <label>Role</label>
-                        <select
-                            value={datax.role}
-                            onChange={(e) => setData('role', e.target.value)}
-                            className="w-full border p-2"
-                        >
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                            <option value="superadmin">Superadmin</option>
-                        </select>
-                        {localErrors.role && <div className="text-red-500 text-sm">{localErrors.role}</div>}
-                        {errors.role && <div className="text-red-500">{errors.role}</div>}
-                    </div>
-
 
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
@@ -227,22 +238,28 @@ const selectedRole = searchParams.get('role') || 'user';
                             type="file"
                             name="img"
                             accept="image/*"
+
                             onChange={(e) => {
                                 const file = e.target.files?.[0] ?? null;
                                 setData('img', file);
 
+                                // ✅ Clear only the image error
+                                setLocalErrors(prev => ({ ...prev, img: '' }));
+
                                 // Optional: For preview
                                 if (file) {
-                                const reader = new FileReader();
-                                reader.onload = () => {
+                                    const reader = new FileReader();
+                                    reader.onload = () => {
                                     const result = reader.result;
                                     if (typeof result === 'string') {
-                                    setPreviewUrl(result);
+                                        setPreviewUrl(result);
                                     }
-                                };
-                                reader.readAsDataURL(file);
+                                    };
+                                    reader.readAsDataURL(file);
                                 }
-                            }}
+                                }}
+
+
                             className="hidden"
                             />
                         </label>
@@ -258,10 +275,9 @@ const selectedRole = searchParams.get('role') || 'user';
                             </div>
                         )}
 
-               
                         {localErrors.img && <div className="text-red-500 text-sm">{localErrors.img}</div>}
                         {errors.img && <div className="text-red-500 text-sm mt-1">{errors.img}</div>}
-                        </div>
+                    </div>
 
 
                     <div className="mb-4">
@@ -287,10 +303,23 @@ const selectedRole = searchParams.get('role') || 'user';
                         {errors.filer && <div className="text-red-500 text-sm mt-1">{errors.filer}</div>}
                     </div>
 
-                    <button type="submit" disabled={processing} 
-                    className=" cursor-pointer bg-blue-500 text-white px-4 py-2">
+                    <button
+                        type="submit"
+                        disabled={processing || Object.values(localErrors).some((v) => v !== '')
+                            || emailExists}
+                        className={` px-4 py-2 text-white ${
+                            processing || Object.values(localErrors).some((v) => v !== '') || emailExists
+                            ? 'bg-gray-400 cursor-not-allowed'
+                            : 'bg-blue-500 cursor-pointer'
+                        }`}
+                        >
                         Create
                     </button>
+                    <button type="button" onClick={() => reset()} 
+                    className="btn-blue-500 ml-2 px-4 py-2 bg-blue-500 text-white cursor-pointer mt-2">
+                    Reset 
+                    </button>
+
                 </form>
                 </div>
             </AppLayout>

@@ -1,0 +1,19 @@
+laravel new inertiareact1
+cd inertiareact1
+composer run dev
+php artisan migrate:fresh --force
+composer require tightenco/ziggy
+
+
+php artisan make:model --migration --controller Cat
+php artisan make:model --migration --controller Subcat
+php artisan make:model --migration --controller Prod
+php artisan make:model --migration --controller Tagg
+php artisan make:model --migration --controller Prodtagg
+php artisan migrate:fresh --force
+php artisan make:seeder DemoDataSeeder
+
+
+
+
+

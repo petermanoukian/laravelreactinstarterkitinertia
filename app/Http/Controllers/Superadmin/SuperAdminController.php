@@ -31,7 +31,7 @@ class SuperAdminController extends Controller
         }
 
         // ✅ Filter by role
-        if ($request->filled('role')) {
+        if ($request->filled('role') && $request->input('role') !== 'all') {
             $query->where('role', $request->input('role'));
         }
 
@@ -78,6 +78,21 @@ class SuperAdminController extends Controller
 
         return response()->json(['exists' => $exists]);
     }
+
+    public function checkEmailEdit(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'id' => 'required|integer', // current user's ID
+        ]);
+
+        $exists = User::where('email', $request->email)
+                    ->where('id', '!=', $request->id) // Exclude current record
+                    ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
 
     public function edit($id)
     {

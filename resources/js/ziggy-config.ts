@@ -1,19 +1,18 @@
 // resources/js/ziggy-config.ts
 import type { Config } from 'ziggy-js';
+import { prodRoutes } from './ziggy-prods';
+import {subRoutes} from './ziggy-subs';
+import { catRoutes } from './ziggy-cats';
+import {taggRoutes} from './ziggy-taggs';
 
 export const Ziggy: Config = {
   url: 'http://127.0.0.1:8000',
   port: 8000,
   defaults: {},
   routes: {
-    /*
-    'superadmin.user.update': {
-      uri: 'superadmin/user/update/{id}',
-      methods: ['POST', 'PUT'],
-      parameters: ['id'],
-    }, */
+
   
-    'superadmin.user.create': {
+  'superadmin.user.create': {
     uri: 'superadmin/adduser',
     methods: ['GET'],
     parameters: [],
@@ -53,6 +52,13 @@ export const Ziggy: Config = {
     methods: ['POST'],
     parameters: [],
   },
+
+  ...catRoutes,  
+  ...subRoutes,
+  ...prodRoutes,
+  ...taggRoutes,
+  
+
     
 
   },

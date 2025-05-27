@@ -1,5 +1,10 @@
 //navSuperAdminUtils.ts
-export const isItemActive = (href: string | undefined, currentPath: string, currentQuery: URLSearchParams): boolean => {
+
+export const isItemActive = (
+  href: string | undefined,
+  currentPath: string,
+  currentQuery: URLSearchParams
+): boolean => {
   if (!href) return false;
 
   try {
@@ -7,20 +12,22 @@ export const isItemActive = (href: string | undefined, currentPath: string, curr
     const targetPath = url.pathname;
     const targetParams = url.searchParams;
 
-    // Check path match
-    const pathMatches = currentPath === targetPath;
+    if (currentPath !== targetPath) return false;
 
-    // Check query matches (e.g. role=superadmin)
-    let queryMatches = true;
-    for (const [key, value] of targetParams.entries()) {
-      if (currentQuery.get(key) !== value) {
-        queryMatches = false;
-        break;
-      }
+    // Only check for 'role' param and treat 'role=all' as a wildcard
+    const targetRole = targetParams.get('role');
+    const currentRole = currentQuery.get('role');
+
+
+
+    if (targetRole !== null) {
+      return targetRole === currentRole;
     }
 
-    return pathMatches && queryMatches;
+    // If no role in target, accept any
+    return true;
   } catch (e) {
     return false;
   }
 };
+

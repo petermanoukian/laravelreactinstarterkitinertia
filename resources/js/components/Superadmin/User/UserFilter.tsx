@@ -24,7 +24,7 @@ const UserFilter: React.FC<UserFilterProps> = ({ search, role, setSearch, setRol
         onChange={(e) => setRole(e.target.value)}
         className="border px-3 py-2 rounded"
       >
-        <option value="">All Roles</option>
+        <option value="all">All Roles</option>
         <option value="superadmin">Superadmin</option>
         <option value="admin">Admin</option>
         <option value="user">User</option>

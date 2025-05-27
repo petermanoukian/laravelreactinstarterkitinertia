@@ -47,6 +47,7 @@ if (user?.role === 'superadmin') {
       {
         title: 'View',
         children: [
+          { title: 'All Users', href: '/superadmin/users?role=all' },
           { title: 'Superadmins', href: '/superadmin/users?role=superadmin' },
           { title: 'Admins', href: '/superadmin/users?role=admin' },
           { title: 'Users', href: '/superadmin/users?role=user' },
@@ -55,6 +56,7 @@ if (user?.role === 'superadmin') {
       {
         title: 'Add',
         children: [
+          { title: 'Add', href: '/superadmin/adduser' },
           { title: 'Add Superadmin', href: '/superadmin/adduser?role=superadmin' },
           { title: 'Add Admin', href: '/superadmin/adduser?role=admin' },
           { title: 'Add User', href: '/superadmin/adduser?role=user' },
@@ -62,12 +64,74 @@ if (user?.role === 'superadmin') {
       },
     ],
   });
-} else {
+
+  mainNavItems.push({
+    title: 'Shop',
+    icon: Users,
+    children: [
+      {
+        title: 'Categories',
+        children: [
+          { title: 'View Categories', href: '/superadmin/cats/view' },
+          { title: 'Add Categories', href: '/superadmin/cat/add' },
+
+        ],
+      },
+      {
+        title: 'Subcategories',
+        children: [
+          { title: 'View Subcategories', href: '/superadmin/subs/view' },
+          { title: 'Add Subcategories', href: '/superadmin/sub/add' },
+        
+
+        ],
+      },
+
+      {
+        title: 'Products',
+        children: [
+          { title: 'View Products', href: '/superadmin/prods/view' },
+          { title: 'Add Products', href: '/superadmin/prod/add' },
+        ],
+      },  
+    ],
+  });
+
+
+  mainNavItems.push({
+    title: 'Tags',
+    icon: Users,
+  
+        children: [
+          { title: 'View Tags', href: '/superadmin/taggs/view' },
+          { title: 'Add Tags', href: '/superadmin/tagg/add' },
+
+        ],
+  
+  });
+
+
+
+
+
+} 
+else 
+{
   mainNavItems.push({
     title: 'Users',
     href: `/${user.role}/users`,
     icon: Users,
   });
+
+
+
+
+
+
+
+
+
+  
 }
 
 

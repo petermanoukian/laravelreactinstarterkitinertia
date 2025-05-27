@@ -52,11 +52,12 @@ import { Button } from '@/Components/ui/button'
     direction?: string;
     };
 
+    /*
     type PageProps = {
     auth_user_id: number;
     auth_user_role: string;
     };
-
+    */
     export default function UsersIndex({
     users,
     filters = {},
@@ -65,7 +66,7 @@ import { Button } from '@/Components/ui/button'
     filters?: Filters;
     }) {
 
-        console.log('🧾 Users:', users);
+    console.log('🧾 Users:', users);
   
     const [search, setSearch] = useState(filters.search ?? '');
     const [role, setRole] = useState(filters.role ?? '');
@@ -112,9 +113,6 @@ import { Button } from '@/Components/ui/button'
         });
     }, [search, role, sort, direction, page]);
 
-
-
-    // ⏳ Debounce search input
     const debouncedSearch = useMemo(() => 
     debounce((value: string) => {
         applyFilters({ search: value });
@@ -123,7 +121,6 @@ import { Button } from '@/Components/ui/button'
     );
 
 
-    // 🚀 Run when search changes (debounced)
     useEffect(() => {
         if (search.length >= 2 || search.length === 0) {
         debouncedSearch(search);
@@ -144,10 +141,10 @@ import { Button } from '@/Components/ui/button'
     };
 
 
-    const handleDelete = async (id: number) => {
-       
-
-        try {
+    const handleDelete = async (id: number) => 
+    {
+        try 
+        {
             const url = route('superadmin.users.destroy', { id });
             const response = await fetch(url, {
                 method: 'DELETE',
@@ -163,13 +160,11 @@ import { Button } from '@/Components/ui/button'
                 return;
             }
 
-            //alert('User deleted successfully.');
-
-            // REFRESH THE USER LIST:
-            // Trigger reload of the current page with current filters, so users list updates
             applyFilters({ page: 1 }); // reset to page 1 after delete (optional)
 
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             alert('Unexpected error occurred while deleting user.');
             console.error(error);
         }
@@ -186,18 +181,14 @@ import { Button } from '@/Components/ui/button'
         const allIds = users.data
             .filter(u => u.id !== loggedInUser?.id) // exclude self
             .map(u => u.id);
-
         const isAllSelected = allIds.every(id => selectedIds.includes(id));
-
         setSelectedIds(isAllSelected ? [] : allIds);
     };
 
     const handleDeleteSelected = async () => 
     {
         if (selectedIds.length === 0) return alert("No users selected.");
-
         //if (!confirm(`Delete ${selectedIds.length} user(s)?`)) return;
-
         try {
             const response = await fetch(route('superadmin.users.destroyAll'), {
                 method: 'POST',
@@ -212,6 +203,7 @@ import { Button } from '@/Components/ui/button'
             const data = await response.json();
 
             if (!response.ok) {
+                
                 alert(`Error: ${data.message || 'Failed to delete users.'}`);
                 return;
             }
@@ -317,9 +309,6 @@ import { Button } from '@/Components/ui/button'
                 onPageChange={(page) => applyFilters({ page })}
                 />
             </div>
-
-
-
 
         </div>
         </AppLayout>

@@ -42,6 +42,7 @@ function RenderNavItems({ items, depth }: { items: any[]; depth: number }) {
 
   return (
     <>
+    <ul className={depth > 0 ? "pl-2" : ""}>
       {items.map((item) => {
         const hasChildren = item.children && item.children.length > 0;
         const isOpen = openItem === item.title;
@@ -50,7 +51,13 @@ function RenderNavItems({ items, depth }: { items: any[]; depth: number }) {
         const currentPath = location.pathname;
         const currentQuery = location.searchParams;
 
-        const isActive = isItemActive(item.href, currentPath, currentQuery);
+        //const isActive = isItemActive(item.href, currentPath, currentQuery);
+        let isActive = false;
+        if (item.href) {
+          isActive = isItemActive(item.href, currentPath, currentQuery);
+        }
+
+
         /*
         const isActive =
         item.href && currentRole
@@ -73,10 +80,10 @@ function RenderNavItems({ items, depth }: { items: any[]; depth: number }) {
               tooltip={{ children: item.title }}
             >
               {hasChildren ? (
-                <div className="flex items-center w-full justify-between">
+                <div className="flex items-center w-full justify-between cursor-pointer">
                   <div className="flex items-center space-x-2">
                     {item.icon && <item.icon className="h-4 w-4" />}
-                    <span>{item.title}</span>
+                    <span className="cursor-pointer"> {item.title}</span>
                   </div>
                   {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                 </div>
@@ -94,13 +101,14 @@ function RenderNavItems({ items, depth }: { items: any[]; depth: number }) {
             </SidebarMenuButton>
 
             {hasChildren && isOpen && (
-              <div className="ml-4 border-l border-muted-foreground/20 pl-4">
+              <div className="ml-1 border-l border-muted-foreground/20 pl-1">
                 <RenderNavItems items={item.children} depth={depth + 1} />
               </div>
             )}
           </SidebarMenuItem>
         );
       })}
+      </ul>
     </>
   );
 }
